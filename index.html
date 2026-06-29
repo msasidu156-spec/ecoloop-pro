@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoLoop Ultimate - 100% AI Waste Network</title>
+    <title>EcoLoop Ultimate - PickMe Style AI Waste Network</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -33,13 +33,19 @@
                     <i class="fa-solid fa-leaf text-3xl text-emerald-500"></i>
                 </div>
                 <h2 class="text-2xl font-black text-white">EcoLoop Pro</h2>
-                <p class="text-[10px] text-slate-500 uppercase tracking-[3px]">Registration Portal</p>
+                <p class="text-[10px] text-slate-500 uppercase tracking-[3px]">Select Your Profile</p>
             </div>
+            
+            <!-- Role Selector Tabs -->
+            <div class="grid grid-cols-2 gap-2 bg-slate-900 p-1 rounded-xl">
+                <button onclick="setRole('customer')" id="role-cust-btn" class="py-2.5 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950">Customer</button>
+                <button onclick="setRole('vendor')" id="role-vend-btn" class="py-2.5 text-xs font-bold rounded-lg text-slate-400">Vendor (Driver)</button>
+            </div>
+
             <div class="space-y-3">
                 <input type="text" id="reg-name" placeholder="ඔබේ නම" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl outline-none text-sm text-white focus:border-emerald-500">
                 <input type="tel" id="reg-phone" placeholder="දුරකථන අංකය" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl outline-none text-sm text-white focus:border-emerald-500">
-                <input type="email" id="reg-email" placeholder="E-mail" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl outline-none text-sm text-white focus:border-emerald-500">
-                <input type="text" id="reg-area" placeholder="ප්‍රදේශය (City)" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl outline-none text-sm text-white focus:border-emerald-500">
+                <input type="text" id="reg-area" placeholder="ප්‍රදේශය (City - e.g. Colombo, Gampaha)" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl outline-none text-sm text-white focus:border-emerald-500">
                 <button onclick="registerUser()" id="reg-btn" class="w-full bg-emerald-500 text-slate-950 font-black py-4 rounded-2xl shadow-xl shadow-emerald-500/20 uppercase tracking-widest text-xs">ලියාපදිංචි වන්න</button>
             </div>
         </div>
@@ -51,24 +57,18 @@
             <i class="fa-solid fa-circle-nodes text-emerald-500 text-xl animate-pulse"></i>
             <h1 class="text-lg font-black tracking-tighter uppercase">EcoLoop <span class="text-emerald-500 italic">Ultimate</span></h1>
         </div>
-        <button onclick="switchTab('tab-admin')" class="text-slate-400 text-lg"><i class="fa-solid fa-user-shield"></i></button>
+        <div class="flex items-center gap-2">
+            <span id="user-display-role" class="text-[9px] font-bold bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-full uppercase">Customer Mode</span>
+            <button onclick="switchTab('tab-admin')" class="text-slate-400 text-lg"><i class="fa-solid fa-user-shield"></i></button>
+        </div>
     </header>
 
-    <!-- AD ADS MONETIZATION -->
-    <div class="mx-5 my-3 p-4 bg-gradient-to-r from-emerald-900/40 to-slate-900 rounded-3xl border border-emerald-500/20 flex justify-between items-center">
-        <div>
-            <h4 class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Sponsored</h4>
-            <p class="text-[10px] text-slate-400">කුණු විකුණා සල්ලි ගන්න දැන්ම ලියාපදිංචි වන්න!</p>
-        </div>
-        <span class="text-[8px] bg-emerald-500 text-black font-bold px-2 py-1 rounded">PROMO</span>
-    </div>
-
-    <main class="px-5">
-        <!-- AI SCAN & CAMERA -->
+    <main class="px-5 mt-4">
+        <!-- CUSTOMER VIEW: AI SCAN & CAMERA -->
         <section id="tab-scan" class="page-tab active space-y-4">
             <div class="glass p-5 rounded-[35px] space-y-4">
                 <div class="flex justify-between items-center px-1">
-                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Real-time AI Detector</span>
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">PickMe Style Waste Booking</span>
                     <span class="text-[10px] text-emerald-400 font-bold bg-emerald-400/10 px-2 py-0.5 rounded">ONLINE</span>
                 </div>
                 
@@ -88,18 +88,32 @@
                     <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase">AI පද්ධතිය පරීක්ෂා කරමින් පවතී...</p>
                 </div>
 
+                <!-- SCAN RESULT WITH PICKME BOOKING -->
                 <div id="ai-result-box" class="hidden glass p-5 rounded-2xl border-l-4 border-l-emerald-500 space-y-2">
                     <h4 class="text-xs font-black text-white" id="res-title">Detected Waste</h4>
                     <p class="text-[11px] text-slate-400 leading-relaxed" id="res-desc"></p>
                     <div class="flex justify-between pt-2">
                         <span class="text-[10px] font-bold text-emerald-400" id="res-price">රු. 0.00</span>
-                        <button onclick="alert('ඕඩරය සාර්ථකව යොමු කරන ලදී!')" class="text-[10px] bg-white text-black px-4 py-1 rounded-full font-black uppercase">විකුණන්න</button>
+                        <button onclick="bookPickup()" id="pickup-btn" class="text-[10px] bg-emerald-500 text-black px-4 py-2 rounded-xl font-black uppercase tracking-wider"><i class="fa-solid fa-location-arrow mr-1"></i> Request Pickup</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- VIDEO FEED -->
+        <!-- PICKME DRIVER/VENDOR JOB RADAR VIEW -->
+        <section id="tab-vendor-jobs" class="page-tab space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest italic">Available Pickups in Your Area</h3>
+                <button onclick="loadAvailableJobs()" class="text-emerald-500 text-xs font-bold"><i class="fa-solid fa-rotate mr-1"></i> Refresh</button>
+            </div>
+            
+            <div id="job-radar-container" class="space-y-3">
+                <!-- Live Job Cards will load here dynamically -->
+                <p class="text-slate-500 text-center py-6 text-xs">මොහොතක් රැඳෙන්න...</p>
+            </div>
+        </section>
+
+        <!-- TIKTOK SHORTS VIDEO FEED -->
         <section id="tab-videos" class="page-tab space-y-4">
             <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest italic">#EcoShorts - Success Stories</h3>
             <div class="video-container space-y-4">
@@ -114,7 +128,7 @@
 
         <!-- MAP VIEW -->
         <section id="tab-map" class="page-tab space-y-4">
-            <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest italic">Live Vendor Tracking</h3>
+            <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest italic">Live Vendor & Order Tracking</h3>
             <div id="map" class="w-full h-[60vh] rounded-[30px] border border-slate-800"></div>
         </section>
 
@@ -136,7 +150,6 @@
                 <input type="password" id="admin-pass" placeholder="Password" class="w-full p-4 bg-slate-900 border border-slate-800 rounded-2xl text-center text-emerald-500 font-bold outline-none">
                 <button onclick="verifyAdmin()" class="w-full bg-white text-black py-4 rounded-2xl font-black uppercase text-xs">Unlock System</button>
             </div>
-
             <div id="admin-panel" class="hidden space-y-5">
                 <div class="glass p-6 rounded-3xl space-y-3">
                     <h4 class="text-[10px] font-black uppercase text-slate-500">User Data (Live from Supabase)</h4>
@@ -149,41 +162,59 @@
     <!-- BOTTOM NAVIGATION -->
     <nav class="fixed bottom-0 left-0 right-0 h-20 glass border-t border-slate-900 flex items-center justify-around z-[60] px-4">
         <button onclick="switchTab('tab-scan')" id="btn-tab-scan" class="nav-tab nav-active flex flex-col items-center gap-1 text-[9px] font-black uppercase text-slate-500"><i class="fa-solid fa-expand-alt text-lg"></i> Scan</button>
-        <button onclick="switchTab('tab-map')" id="btn-tab-map" class="nav-tab flex flex-col items-center gap-1 text-[9px] font-black uppercase text-slate-500"><i class="fa-solid fa-map-marked-alt text-lg"></i> Vendors</button>
+        <button onclick="switchTab('tab-vendor-jobs')" id="btn-tab-vendor-jobs" class="nav-tab flex flex-col items-center gap-1 text-[9px] font-black uppercase text-slate-500"><i class="fa-solid fa-truck-ramp-box text-lg"></i> Pickup Jobs</button>
+        <button onclick="switchTab('tab-map')" id="btn-tab-map" class="nav-tab flex flex-col items-center gap-1 text-[9px] font-black uppercase text-slate-500"><i class="fa-solid fa-map-marked-alt text-lg"></i> Map</button>
         <button onclick="switchTab('tab-videos')" id="btn-tab-videos" class="nav-tab flex flex-col items-center gap-1 text-[9px] font-black uppercase text-slate-500"><i class="fa-solid fa-circle-play text-lg"></i> Shorts</button>
         <button onclick="switchTab('tab-laws')" id="btn-tab-laws" class="nav-tab flex flex-col items-center gap-1 text-[9px] font-black uppercase text-slate-500"><i class="fa-solid fa-balance-scale text-lg"></i> Laws</button>
     </nav>
 
     <script>
-        // 🔑 CORRECT & FIXED SUPABASE CONFIGURATION
+        // 🔑 SUPABASE & GEMINI CONFIGURATION
         const SUPABASE_URL = "https://xqzixtvmtaalitrkktzi.supabase.co";
         const SUPABASE_KEY = "sb_publishable_GLDTORqKOJ6ldqQ8kwopmQ_2oVNCkXB";
-        
         const Gemini_API_KEY = "AQ.Ab8RN6KvUAKJG7VGFBsGzU_VDBr8g_YbDl6VMgMNDDAlE3AE8A";
         const ADMIN_PWD = "mss@76";
+        
         let map;
+        let selectedRole = 'customer'; 
+        let lastScannedItem = { details: "", price: 0 };
 
         window.onload = function() {
-            if(localStorage.getItem('eco_u_data')) {
+            let savedUser = localStorage.getItem('eco_u_data');
+            if(savedUser) {
                 document.getElementById('auth-gate').style.display = 'none';
+                let parsed = JSON.stringify(savedUser);
+                document.getElementById('user-display-role').innerText = parsed.role === 'vendor' ? 'Vendor Mode' : 'Customer Mode';
             }
             initMap();
+            loadAvailableJobs();
         }
 
-        // 8. FIXED USER REGISTRATION
+        // ROLE SELECTION LOGIC
+        function setRole(role) {
+            selectedRole = role;
+            if(role === 'customer') {
+                document.getElementById('role-cust-btn').className = "py-2.5 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950";
+                document.getElementById('role-vend-btn').className = "py-2.5 text-xs font-bold rounded-lg text-slate-400";
+            } else {
+                document.getElementById('role-vend-btn').className = "py-2.5 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950";
+                document.getElementById('role-cust-btn').className = "py-2.5 text-xs font-bold rounded-lg text-slate-400";
+            }
+        }
+
+        // REGISTER LOGIC WITH ROLES
         async function registerUser() {
             const n = document.getElementById('reg-name').value.trim();
             const p = document.getElementById('reg-phone').value.trim();
-            const e = document.getElementById('reg-email').value.trim();
             const a = document.getElementById('reg-area').value.trim();
 
-            if(!n || !p) return alert("අවශ්‍ය විස්තර ලබා දෙන්න!");
+            if(!n || !p || !a) return alert("කරුණාකර සියලුම විස්තර ලබා දෙන්න!");
             
             const btn = document.getElementById('reg-btn');
-            btn.innerText = "සුරකිමින් පවතී...";
+            btn.innerText = "ලියාපදිංචි වෙමින්...";
             btn.disabled = true;
 
-            const userData = { name: n, phone: p, email: e, area: a };
+            const userData = { name: n, phone: p, area: a, role: selectedRole };
 
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
@@ -200,19 +231,127 @@
                 if (response.ok) {
                     localStorage.setItem('eco_u_data', JSON.stringify(userData));
                     document.getElementById('auth-gate').style.display = 'none';
-                    alert("ලියාපදිංචිය සාර්ථකයි!");
-                } else {
-                    throw new Error("Database Error");
-                }
+                    document.getElementById('user-display-role').innerText = selectedRole === 'vendor' ? 'Vendor Mode' : 'Customer Mode';
+                    alert("සාර්ථකව ලියාපදිංචි විය!");
+                    loadAvailableJobs();
+                } else { throw new Error("DB Error"); }
             } catch (error) {
-                alert("ලියාපදිංචි වීමේදී දෝෂයක් සිදු විය! කරුණාකර නැවත උත්සාහ කරන්න.");
-                console.error(error);
+                alert("ලියාපදිංචි වීමේදී දෝෂයක් සිදු විය!");
             } finally {
                 btn.innerText = "ලියාපදිංචි වන්න";
                 btn.disabled = false;
             }
         }
 
+        // PICKME STYLE METHOD: REQUEST A PICKUP
+        async function bookPickup() {
+            let uData = JSON.parse(localStorage.getItem('eco_u_data'));
+            if(!uData) return alert("කරුණාකර මුලින්ම ලියාපදිංචි වන්න!");
+
+            const btn = document.getElementById('pickup-btn');
+            btn.innerText = "Booking Job...";
+            btn.disabled = true;
+
+            const jobPayload = {
+                customer_name: uData.name,
+                customer_phone: uData.phone,
+                area: uData.area,
+                item_details: lastScannedItem.details,
+                price: lastScannedItem.price,
+                status: "pending" // PickMe default status
+            };
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jobPayload)
+                });
+
+                if(response.ok) {
+                    alert("🚨 PickMe Pickup Request එක සාර්ථකව යොමු කළා! ළඟම සිටින වෙළෙන්දෙකු ඔබට සම්බන්ධ වනු ඇත.");
+                    document.getElementById('ai-result-box').classList.add('hidden');
+                } else { alert("ඕඩරය යොමු කිරීමට නොහැකි විය."); }
+            } catch(e) { alert("සම්බන්ධතා දෝෂයකි!"); }
+            finally {
+                btn.innerHTML = `<i class="fa-solid fa-location-arrow mr-1"></i> Request Pickup`;
+                btn.disabled = false;
+            }
+        }
+
+        // PICKME STYLE METHOD: VENDOR RADAR (LOAD JOBS)
+        async function loadAvailableJobs() {
+            const container = document.getElementById('job-radar-container');
+            let uData = localStorage.getItem('eco_u_data') ? JSON.parse(localStorage.getItem('eco_u_data')) : null;
+            let filterArea = uData ? uData.area : "";
+
+            try {
+                // Fetch pending orders matching vendor's area
+                let endpoint = `${SUPABASE_URL}/rest/v1/orders?status=eq.pending`;
+                if(filterArea) endpoint += `&area=eq.${filterArea}`;
+
+                const response = await fetch(endpoint, {
+                    method: 'GET',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                if(response.ok) {
+                    const jobs = await response.json();
+                    if(jobs.length === 0) {
+                        container.innerHTML = `<p class="text-slate-500 text-center py-6 text-xs">ඔබේ ප්‍රදේශයේ (`+ (filterArea || 'සියලු') +`) දැනට නව පිකප් ඇණවුම් කිසිවක් නොමැත.</p>`;
+                        return;
+                    }
+
+                    container.innerHTML = jobs.map(j => `
+                        <div class="glass p-5 rounded-2xl border border-slate-800 space-y-3 relative overflow-hidden">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-[9px] bg-amber-500/10 text-amber-400 font-bold px-2 py-0.5 rounded uppercase tracking-wider">⚠️ Pending Pickup</span>
+                                    <h4 class="text-xs font-black text-white mt-1.5"><i class="fa-solid fa-user text-[10px] mr-1 text-emerald-500"></i> ${j.customer_name}</h4>
+                                </div>
+                                <span class="text-xs font-black text-emerald-400">රු. ${j.price}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400"><i class="fa-solid fa-recycle text-[10px] mr-1"></i> ${j.item_details}</p>
+                            <div class="flex justify-between items-center pt-2 border-t border-slate-900 text-[10px]">
+                                <span class="text-slate-500 font-bold"><i class="fa-solid fa-map-marker-alt text-red-500 mr-1"></i> ${j.area}</span>
+                                <button onclick="acceptPickupJob(${j.id}, '${j.customer_phone}')" class="bg-emerald-500 text-slate-950 font-black px-4 py-1.5 rounded-xl uppercase tracking-wider shadow-lg shadow-emerald-500/10">Accept Job</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch(e) { container.innerHTML = `<p class="text-red-500 text-center text-xs">දත්ත ලබාගැනීම අසාර්ථකයි.</p>`; }
+        }
+
+        // PICKME STYLE METHOD: ACCEPT JOB
+        async function acceptPickupJob(id, phone) {
+            if(!confirm("ඔබ මෙම ඇණවුම බාර ගැනීමට කැමතිද?")) return;
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: "accepted" })
+                });
+
+                if(response.ok) {
+                    alert(`✅ Job Accepted! කරුණාකර පාරිභෝගිකයා අමතා පිකප් එක සිදු කරන්න.\n📞 දුරකථන අංකය: ${phone}`);
+                    loadAvailableJobs();
+                } else { alert("Job එක බාර ගැනීමට නොහැකි විය."); }
+            } catch(e) { alert("දෝෂයකි!"); }
+        }
+
+        // NAVIGATION
         function switchTab(id) {
             document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -221,7 +360,7 @@
             if(id === 'tab-map' && map) setTimeout(() => map.invalidateSize(), 200);
         }
 
-        // CAMERA & AI FIXED FOR MOBILES
+        // CAMERA ENGINE
         async function startCamera() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
@@ -234,6 +373,7 @@
             } catch (err) { alert("කැමරාව ක්‍රියාත්මක කළ නොහැක: " + err); }
         }
 
+        // AI SCANNER ENGINE
         async function captureAndScan() {
             const video = document.getElementById('video');
             const canvas = document.getElementById('canvas');
@@ -250,7 +390,6 @@
             document.getElementById('ai-result-box').classList.add('hidden');
 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${Gemini_API_KEY}`;
-            
             const payload = {
                 contents: [{
                     parts: [
@@ -261,11 +400,7 @@
             };
 
             try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 const data = await response.json();
                 const aiText = data.candidates[0].content.parts[0].text;
                 
@@ -273,12 +408,20 @@
                 document.getElementById('ai-result-box').classList.remove('hidden');
                 document.getElementById('res-desc').innerText = aiText;
                 
+                let extractedPrice = 0;
                 const priceMatch = aiText.match(/රු\.\s?(\d+)/);
-                if(priceMatch) document.getElementById('res-price').innerText = "රු. " + priceMatch[1];
+                if(priceMatch) {
+                    extractedPrice = parseInt(priceMatch[1]);
+                    document.getElementById('res-price').innerText = "රු. " + extractedPrice;
+                }
+
+                // Cache values for pickup order
+                lastScannedItem.details = aiText;
+                lastScannedItem.price = extractedPrice;
 
             } catch (error) {
                 document.getElementById('ai-loading').classList.add('hidden');
-                alert("AI සේවාව මේ මොහොතේ කාර්යබහුලයි. නැවත උත්සාහ කරන්න!");
+                alert("AI සේවාව කාර්යබහුලයි!");
             }
         }
 
@@ -295,41 +438,20 @@
                 document.getElementById('admin-login').classList.add('hidden');
                 document.getElementById('admin-panel').classList.remove('hidden');
                 loadUsers();
-            } else { alert("වැරදි මුරපදයක්!"); }
+            } else { alert("වැရදි මුරපදයක්!"); }
         }
 
         async function loadUsers() {
             const list = document.getElementById('user-list');
-            list.innerHTML = `<p class="text-slate-400 text-center py-2">Supabase වෙතින් දත්ත ලබා ගනිමින් පවතී...</p>`;
-            
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=*`, {
-                    method: 'GET',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json'
-                    }
+                    method: 'GET', headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
-
                 if (response.ok) {
                     const db = await response.json();
-                    if(db.length === 0) {
-                        list.innerHTML = `<p class="text-slate-500 text-center py-2">තවම කිසිදු පරිශීලකයෙකු ලියාපදිංචි වී නොමැත.</p>`;
-                        return;
-                    }
-                    list.innerHTML = db.map(u => `
-                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 mb-2">
-                            <p class="text-white font-bold">${u.name || 'නමක් නැත'}</p>
-                            <p class="text-emerald-500">${u.phone || 'අංකයක් නැත'} | ${u.area || 'ප්‍රදේශයක් නැත'}</p>
-                        </div>
-                    `).join('');
-                } else {
-                    list.innerHTML = `<p class="text-red-500 text-center py-2">දත්ත ලබා ගැනීමට නොහැකි විය.</p>`;
+                    list.innerHTML = db.map(u => `<div class="bg-slate-900 p-2 border border-slate-800 mb-1 rounded-lg"><p class="text-white">${u.name} (${u.role || 'user'})</p></div>`).join('');
                 }
-            } catch (error) {
-                list.innerHTML = `<p class="text-red-500 text-center py-2">සම්බන්ධතා දෝෂයකි!</p>`;
-            }
+            } catch (e) {}
         }
     </script>
 </body>
