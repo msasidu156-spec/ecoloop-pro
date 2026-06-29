@@ -307,17 +307,17 @@
                         container.innerHTML = `<p class="text-slate-500 text-center py-6 text-xs">ඔබේ ප්‍රදේශයේ දැනට නව පිකප් ඇණවුම් කිසිවක් නොමැත.</p>`;
                         return;
                     }
+                                   // 🎯 නිවැරදි Gemini API Format එක
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${Gemini_API_KEY}`;
+            const payload = {
+                contents: [{
+                    parts: [
+                        { inlineData: { mimeType: "image/jpeg", data: base64Image } },
+                        { text: "Identify this waste item. Return result strictly as: Item: [Name], Weight: [X]kg, Price: රු. [Price]. Also add a short tip in Sinhala." }
+                    ]
+                }]
+            };
 
-                    container.innerHTML = jobs.map(j => `
-                        <div class="glass p-5 rounded-2xl border border-slate-800 space-y-3 relative overflow-hidden">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <span class="text-[9px] bg-amber-500/10 text-amber-400 font-bold px-2 py-0.5 rounded uppercase tracking-wider">⚠️ Pending Pickup</span>
-                                    <h4 class="text-xs font-black text-white mt-1.5"><i class="fa-solid fa-user text-[10px] mr-1 text-emerald-500"></i> ${j.customer_name}</h4>
-                                </div>
-                                <span class="text-xs font-black text-emerald-400">රු. ${j.price}</span>
-                            </div>
-                            <p class="text-[11px] text-slate-400"><i class="fa-solid fa-recycle text-[10px] mr-1"></i> ${j.item_details}</p>
                             <div class="flex justify-between items-center pt-2 border-t border-slate-900 text-[10px]">
                                 <span class="text-slate-500 font-bold"><i class="fa-solid fa-map-marker-alt text-red-500 mr-1"></i> ${j.area}</span>
                                 <button onclick="acceptPickupJob(${j.id}, '${j.customer_phone}')" class="bg-emerald-500 text-slate-950 font-black px-4 py-1.5 rounded-xl uppercase tracking-wider">Accept Job</button>
