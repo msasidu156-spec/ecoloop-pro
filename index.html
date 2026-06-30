@@ -13,14 +13,27 @@
         body { background-color: #050810; font-family: 'Poppins', sans-serif; color: #e2e8f0; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
         #map { height: 200px; border-radius: 1rem; width: 100%; }
+        .ad-box { background: linear-gradient(45deg, #0f172a, #1e293b); border: 1px dashed rgba(16, 185, 129, 0.3); }
     </style>
+    
+    <!-- 📢 GOOGLE ADS SCRIPT PLACEHOLDER -->
+    <!-- උඹට Google Adsense/AdMob ඇපෲවල් හම්බුණාම දෙන Script එක මෙතනට දාපන් මචං -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
-<body class="p-4 md:p-8 flex items-center justify-center min-h-screen">
+<body class="p-4 md:p-8 flex flex-col items-center justify-center min-h-screen space-y-4">
 
+    <!-- TOP GOOGLE AD BANNER (ආදායම වැඩි කරගන්න උඩින්ම දාපු ඇඩ් එක) -->
+    <div class="w-full max-w-md ad-box p-2 rounded-xl text-center text-[10px] text-emerald-400/60 font-bold tracking-widest uppercase">
+        <p class="mb-1 text-[8px] text-slate-500">Sponsored Advertisement</p>
+        <!-- Google Ad Code Goes Here -->
+        <div class="h-12 flex items-center justify-center">Google Banner Ad Space</div>
+    </div>
+
+    <!-- Main App Card -->
     <div class="glass w-full max-w-md p-6 rounded-[35px] border-l-4 border-l-emerald-500 space-y-6 shadow-2xl">
         <!-- Header -->
         <div class="text-center">
-            <h1 class="text-2xl font-black text-white tracking-tight">EcoLoop <span class="text-emerald-500">Live</span></h1>
+            <h1 class="text-2xl font-black text-white tracking-tight">EcoLoop <span class="text-emerald-500">Pro</span></h1>
             <p class="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mt-1">100% Real AI & Smart Logistics</p>
         </div>
 
@@ -65,6 +78,11 @@
         </div>
     </div>
 
+    <!-- BOTTOM GOOGLE AD BANNER (යටින්ම පේන්න තියෙන ඇඩ් එක) -->
+    <div class="w-full max-w-md ad-box p-2 rounded-xl text-center text-[10px] text-emerald-400/60 font-bold tracking-widest uppercase">
+        <div class="h-12 flex items-center justify-center">Google Banner Ad Space</div>
+    </div>
+
     <!-- Leaflet JS for Map -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
@@ -97,6 +115,8 @@
                     userMarker = L.marker([lat, lon]).addTo(map)
                         .bindPopup('ඔබේ ස්ථානය (Eco-Collection Point)')
                         .openPopup();
+                }, () => {
+                    console.log("Location access denied or unavailable.");
                 });
             }
         }
@@ -140,7 +160,7 @@
             } catch (err) {
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('result-box').classList.remove('hidden');
-                document.getElementById('result-text').innerText = "සර්වර් එක ක්‍රියා විරහිතයි. Netlify Deploy එක සිදුවන තෙක් පොඩ්ඩක් ඉන්න.";
+                document.getElementById('result-text').innerText = "සර්වර් එක සමඟ සම්බන්ධ විය නොහැක. කරුණාකර ඔබ Netlify Environment Variables වල GEMINI_API_KEY එක නිවැරදිව දමා ඇත්දැයි පරීක්ෂා කරන්න.";
             }
         }
 
