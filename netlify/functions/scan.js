@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 exports.handler = async function (event, context) {
     const headers = {
         'Access-Control-Allow-Origin': '*',
@@ -24,7 +22,7 @@ exports.handler = async function (event, context) {
             return { statusCode: 500, headers, body: JSON.stringify({ error: 'සර්වර් එකේ GEMINI_API_KEY එක සෙට් කර නැත.' }) };
         }
 
-        // Gemini API Endpoint
+        // Node 22 නිසා කෙලින්ම global fetch පාවිච්චි කරනවා
         const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         
         const payload = {
@@ -44,7 +42,6 @@ exports.handler = async function (event, context) {
 
         const data = await response.json();
 
-        // 🔍 Google එකෙන් කෙලින්ම එන වැරැද්ද අහුවෙන තැන
         if (data.error) {
             return { statusCode: 500, headers, body: JSON.stringify({ error: `Google API Error: ${data.error.message}` }) };
         }
@@ -54,7 +51,7 @@ exports.handler = async function (event, context) {
             return { statusCode: 200, headers, body: JSON.stringify({ text: aiText }) };
         } 
         
-        return { statusCode: 500, headers, body: JSON.stringify({ error: 'AI එකෙන් ප්‍රතිචාරයක් ආවේ නැත. කරුණාකර නැවත උත්සාහ කරන්න.' }) };
+        return { statusCode: 500, headers, body: JSON.stringify({ error: 'AI එකෙන් ප්‍රතිචාරයක් ආවේ නැත.' }) };
 
     } catch (error) {
         return { statusCode: 500, headers, body: JSON.stringify({ error: 'සර්වර් දෝෂයකි: ' + error.message }) };
