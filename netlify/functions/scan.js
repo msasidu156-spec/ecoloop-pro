@@ -22,13 +22,13 @@ exports.handler = async function (event, context) {
             return { statusCode: 500, headers, body: JSON.stringify({ error: 'සර්වර් එකේ GEMINI_API_KEY එක සෙට් කර නැත.' }) };
         }
 
-        // Node 22 නිසා කෙලින්ම global fetch පාවිච්චි කරනවා
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // 🎯 මෙතන v1beta වෙනුවට v1 සහ ස්ථාවර මොඩල් එකක් පාවිච්චි කරලා තියෙනවා
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         
         const payload = {
             contents: [{
                 parts: [
-                    { text: "Identify this waste item and tell me how to recycle it shortly in Sinhala." },
+                    { text: "ඔබ අපද්‍රව්‍ය කළමනාකරණය පිළිබඳ විශේෂඥයෙකි. මෙම පින්තූරයේ ඇති ද්‍රව්‍යය කුමක්දැයි හඳුනාගෙන, එය ප්‍රතිචක්‍රීකරණය කළ හැකිද (Recyclable) නැද්ද යන්න සහ එය බැහැර කළ යුතු නිවැရදි ක්‍රමය කෙටියෙන් සිංහල භාෂාවෙන් (In Sinhala) පවසන්න." },
                     { inlineData: { mimeType: "image/jpeg", data: base64Image } }
                 ]
             }]
