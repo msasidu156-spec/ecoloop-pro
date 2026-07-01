@@ -1,201 +1,341 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoLoop Pro - Live Waste Management</title>
+    <title>EcoLoop Pro - Eco System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Leaflet CSS for Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
         body { background-color: #050810; font-family: 'Poppins', sans-serif; color: #e2e8f0; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        #map { height: 200px; border-radius: 1rem; width: 100%; }
+        #map { height: 250px; border-radius: 1.5rem; width: 100%; }
         .ad-box { background: linear-gradient(45deg, #0f172a, #1e293b); border: 1px dashed rgba(16, 185, 129, 0.3); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
     </style>
-    
-    <!-- 📢 GOOGLE ADS SCRIPT PLACEHOLDER -->
-    <!-- උඹට Google Adsense/AdMob ඇපෲවල් හම්බුණාම දෙන Script එක මෙතනට දාපන් මචං -->
-    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
-<body class="p-4 md:p-8 flex flex-col items-center justify-center min-h-screen space-y-4">
+<body class="p-4 md:p-8 flex flex-col items-center justify-center min-h-screen space-y-6">
 
-    <!-- TOP GOOGLE AD BANNER (ආදායම වැඩි කරගන්න උඩින්ම දාපු ඇඩ් එක) -->
-    <div class="w-full max-w-md ad-box p-2 rounded-xl text-center text-[10px] text-emerald-400/60 font-bold tracking-widest uppercase">
-        <p class="mb-1 text-[8px] text-slate-500">Sponsored Advertisement</p>
-        <!-- Google Ad Code Goes Here -->
-        <div class="h-12 flex items-center justify-center">Google Banner Ad Space</div>
+    <div id="top-banner-ad" class="w-full max-w-xl ad-box p-3 rounded-2xl text-center text-xs text-emerald-400 font-bold tracking-widest uppercase shadow-md">
+        <p class="text-[9px] text-slate-500 mb-1">Sponsored Banner Advertisement</p>
+        <div class="h-14 flex items-center justify-center bg-slate-900/60 rounded-lg"><i class="fa-solid fa-rectangle-ad mr-2"></i> Google AdSense Live Space (Revenue Tier 1)</div>
     </div>
 
-    <!-- Main App Card -->
-    <div class="glass w-full max-w-md p-6 rounded-[35px] border-l-4 border-l-emerald-500 space-y-6 shadow-2xl">
-        <!-- Header -->
-        <div class="text-center">
-            <h1 class="text-2xl font-black text-white tracking-tight">EcoLoop <span class="text-emerald-500">Pro</span></h1>
-            <p class="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mt-1">100% Real AI & Smart Logistics</p>
-        </div>
-
-        <!-- Section 1: Live Scanner -->
-        <div class="space-y-3">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400"><i class="fa-solid fa-camera mr-1"></i> 1. Smart AI Scanner</h3>
-            <div class="aspect-[4/3] bg-slate-950 rounded-2xl flex items-center justify-center overflow-hidden relative border border-slate-800">
-                <video id="video" class="w-full h-full object-cover" autoplay playsinline></video>
+    <div class="w-full max-w-xl space-y-6">
+        
+        <div id="register-card" class="glass p-6 rounded-[35px] border-l-4 border-l-blue-500 space-y-4 shadow-2xl">
+            <h2 class="text-lg font-black text-white"><i class="fa-solid fa-user-plus text-blue-500 mr-2"></i>නව ගිණුමක් ආරම්භ කරන්න / Register</h2>
+            <p class="text-xs text-slate-400">ඇප් එක භාවිතා කිරීමට ඔබගේ නිවැරදි විස්තර ඇතුළත් කරන්න.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <input id="reg-name" type="text" placeholder="සම්පූර්ණ නම (Name)" class="bg-slate-900 p-3 rounded-xl text-xs border border-slate-800 text-white focus:outline-none focus:border-blue-500">
+                <input id="reg-phone" type="tel" placeholder="දුරකථන අංකය (Phone)" class="bg-slate-900 p-3 rounded-xl text-xs border border-slate-800 text-white focus:outline-none focus:border-blue-500">
+                <input id="reg-email" type="email" placeholder="ඊමේල් ලිපිනය (Email)" class="bg-slate-900 p-3 rounded-xl text-xs border border-slate-800 text-white focus:outline-none focus:border-blue-500">
+                <input id="reg-area" type="text" placeholder="ප්‍රදේශය (Area / City)" class="bg-slate-900 p-3 rounded-xl text-xs border border-slate-800 text-white focus:outline-none focus:border-blue-500">
             </div>
-
-            <button onclick="captureAndScan()" class="w-full bg-emerald-500 text-slate-950 font-black py-4 rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition">
-                <i class="fa-solid fa-bolt mr-1"></i> Scan Waste Item
+            <button onclick="saveUser()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-widest transition">
+                ඇතුළු වන්න (Submit & Proceed)
             </button>
+        </div>
 
-            <div id="loading" class="hidden text-center py-2">
-                <i class="fa-solid fa-circle-notch fa-spin text-emerald-500 text-xl"></i>
-                <p class="text-[11px] text-slate-500 mt-1">සැබෑ Gemini AI හරහා පරීක්ෂා කරමින්...</p>
+        <div id="main-app-card" class="hidden glass p-6 rounded-[35px] border-l-4 border-l-emerald-500 space-y-8 shadow-2xl">
+            
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <div>
+                    <h1 class="text-2xl font-black text-white tracking-tight">EcoLoop <span class="text-emerald-500">Pro</span></h1>
+                    <p class="text-[10px] text-emerald-400 uppercase tracking-widest font-bold mt-1">♻️ Circular Economy & Waste Crypto</p>
+                </div>
+                <button onclick="openAdmin()" class="bg-slate-900 p-2 text-slate-600 rounded-lg text-xs hover:text-emerald-400"><i class="fa-solid fa-lock"></i></button>
             </div>
 
-            <div id="result-box" class="hidden bg-slate-900/50 p-4 rounded-2xl border border-slate-800/80">
-                <h4 class="text-xs font-black text-emerald-400 mb-2">AI විශ්ලේෂණ වාර්තාව:</h4>
-                <p id="result-text" class="text-[13px] text-slate-300 leading-relaxed"></p>
+            <div class="grid grid-cols-4 gap-1 bg-slate-950 p-1.5 rounded-xl text-center text-[11px] font-bold">
+                <button id="tab-scan" onclick="switchTab('scan')" class="bg-emerald-500 text-slate-950 p-2.5 rounded-lg transition"><i class="fa-solid fa-camera block text-sm mb-1"></i>Scanner</button>
+                <button id="tab-pickup" onclick="switchTab('pickup')" class="text-slate-400 p-2.5 rounded-lg transition"><i class="fa-solid fa-truck-pickup block text-sm mb-1"></i>Pickup</button>
+                <button id="tab-tok" onclick="switchTab('tok')" class="text-slate-400 p-2.5 rounded-lg transition"><i class="fa-solid fa-play block text-sm mb-1"></i>EcoTok</button>
+                <button id="tab-map" onclick="switchTab('map')" class="text-slate-400 p-2.5 rounded-lg transition"><i class="fa-solid fa-map-location-dot block text-sm mb-1"></i>Merchants</button>
+            </div>
+
+            <div class="ad-box p-2 rounded-xl text-center text-[10px] text-slate-400 flex items-center justify-between px-4">
+                <span>🔥 Premium Sponsor: In-App Smart Banner</span>
+                <span class="text-emerald-400 font-bold">Earned: +$0.02</span>
+            </div>
+
+            <div id="view-scan" class="space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400"><i class="fa-solid fa-robot mr-1 text-emerald-400"></i> 1. Smart AI Scanner (100% Client-Side Gemini)</h3>
+                <div class="aspect-[4/3] bg-slate-950 rounded-2xl flex items-center justify-center overflow-hidden relative border border-slate-800">
+                    <video id="video" class="w-full h-full object-cover" autoplay playsinline></video>
+                </div>
+                <button onclick="captureAndScan()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black py-4 rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition">
+                    <i class="fa-solid fa-bolt mr-1"></i> Scan & Sell to Merchants
+                </button>
+                <div id="loading" class="hidden text-center py-2">
+                    <i class="fa-solid fa-circle-notch fa-spin text-emerald-500 text-xl"></i>
+                    <p class="text-[11px] text-slate-400 mt-1">Direct Gemini AI විශ්ලේෂණය සිදුවේ...</p>
+                </div>
+                <div id="result-box" class="hidden bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                    <h4 class="text-xs font-black text-emerald-400 mb-2">AI විශ්ලේෂණ වාර්තාව:</h4>
+                    <p id="result-text" class="text-xs text-slate-300 leading-relaxed"></p>
+                    <button onclick="sendScanToMerchants()" class="mt-3 w-full bg-blue-600 text-white text-[10px] py-2 rounded-lg uppercase tracking-wider font-bold hover:bg-blue-700 transition">
+                        <i class="fa-solid fa-paper-plane mr-1"></i> මෙම කුණු දත්ත ලඟම වෙළෙන්දන්ට විකුණන්න (Send & Earn)
+                    </button>
+                </div>
+            </div>
+
+            <div id="view-pickup" class="hidden space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400"><i class="fa-solid fa-truck-ramp-box mr-1 text-emerald-400"></i> 2. Eco-Pickup (PickMe Style Waste Deal)</h3>
+                <div class="space-y-2">
+                    <label class="text-[11px] text-slate-400">කුණු වර්ගය තෝරන්න (Select Waste Type):</label>
+                    <select id="pickup-type" class="w-full bg-slate-900 p-3 rounded-xl text-xs border border-slate-800 text-white focus:outline-none">
+                        <option value="Plastic">ප්ලාස්ටික් සහ पॉलिථින් (Plastics)</option>
+                        <option value="E-Waste">විද්‍යුත් අපද්‍රව්‍ය (Electronic Waste)</option>
+                        <option value="Metal">යකඩ සහ ලෝහ (Metals)</option>
+                        <option value="Paper">කඩදාසි සහ කාඩ්බෝඩ් (Paper/Cardboard)</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[11px] text-slate-400">දළ බර ප්‍රමාණය (Estimated Weight):</label>
+                    <input id="pickup-weight" type="text" placeholder="උදා: 5kg" class="w-full bg-slate-900 p-3 rounded-xl text-xs border border-slate-800 text-white focus:outline-none">
+                </div>
+                <button onclick="requestPickup()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-black py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-md">
+                    <i class="fa-solid fa-location-arrow mr-1"></i> වෙළෙන්දෙකු කැඳවන්න (Request Pickup Now)
+                </button>
+            </div>
+
+            <div id="view-tok" class="hidden space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400"><i class="fa-brands fa-tiktok mr-1 text-pink-500"></i> 3. EcoTok - Shorts & Tutorials</h3>
+                <div class="relative aspect-[9/16] max-h-[350px] bg-black rounded-2xl overflow-hidden flex items-center justify-center border border-slate-800">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10 p-4 flex flex-col justify-end space-y-1">
+                        <p class="text-xs font-bold text-white">@EcoWarrior_LK</p>
+                        <p class="text-[11px] text-slate-300">ප්ලාස්ටික් බෝතල් වලින් ගෙදරට ලස්සන මල් පෝච්චියක් හදමු! ♻️✨</p>
+                        <div class="flex items-center space-x-4 pt-2 text-xs text-white">
+                            <span><i class="fa-solid fa-heart text-pink-500 mr-1"></i> 2.4k</span>
+                            <span><i class="fa-solid fa-comment mr-1"></i> 142</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-play text-4xl text-white/40 absolute"></i>
+                    <div class="absolute right-3 bottom-16 z-20 flex flex-col space-y-4 text-center">
+                        <button class="bg-slate-900/80 p-2.5 rounded-full text-white"><i class="fa-solid fa-heart"></i></button>
+                        <button class="bg-slate-900/80 p-2.5 rounded-full text-white"><i class="fa-solid fa-share"></i></button>
+                    </div>
+                </div>
+                <button class="w-full bg-slate-900 border border-slate-800 text-slate-300 py-2.5 rounded-xl text-xs font-bold">
+                    <i class="fa-solid fa-upload mr-1 text-pink-500"></i> ඔබගේ වීඩියෝවක් එක් කරන්න (Upload EcoTok)
+                </button>
+            </div>
+
+            <div id="view-map" class="hidden space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400"><i class="fa-solid fa-map mr-1 text-emerald-400"></i> 4. Live Registered Waste Merchants Map</h3>
+                <div id="map"></div>
+                <p class="text-[10px] text-slate-500 text-center"><i class="fa-solid fa-circle-info mr-1"></i> සිතියම මත ඇති ලකුණු (Markers) මත ක්ලික් කර වෙළෙන්දාගේ විස්තර ලබා ගන්න.</p>
+            </div>
+
+        </div>
+
+        <div id="view-admin" class="hidden glass p-6 rounded-[35px] border-l-4 border-l-red-500 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-black text-white"><i class="fa-solid fa-circle-user text-red-500 mr-1"></i> Super Admin Dashboard</h2>
+                <button onclick="closeAdmin()" class="text-xs text-slate-400 hover:text-white">Close</button>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-center">
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                    <p class="text-[10px] text-slate-400 uppercase">Total User Data Pool</p>
+                    <p id="admin-user-count" class="text-lg font-black text-blue-400">1</p>
+                </div>
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                    <p class="text-[10px] text-slate-400 uppercase">Data Sales Revenue</p>
+                    <p class="text-lg font-black text-emerald-400">$142.50</p>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <p class="text-xs font-bold text-slate-300">පරිශීලක දත්ත ලේඛනය (Collected Leads & Raw Analytics):</p>
+                <div id="admin-user-list" class="bg-slate-950 p-3 rounded-xl text-[11px] font-mono text-slate-400 max-h-32 overflow-y-auto space-y-1">
+                    </div>
+            </div>
+            <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 space-y-1">
+                <p class="text-xs font-bold text-white"><i class="fa-solid fa-wallet mr-1 text-amber-500"></i> Payout Configuration</p>
+                <p class="text-[11px] text-slate-400">Ad Revenue & Corporate Data Sales are automatically wired to your linked bank gateway profile monthly.</p>
             </div>
         </div>
 
-        <hr class="border-slate-800" />
-
-        <!-- Section 2: PickMe Map & Request -->
-        <div class="space-y-3">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400"><i class="fa-solid fa-map-location-dot mr-1"></i> 2. Eco-Pickup (PickMe Style)</h3>
-            
-            <!-- Live Map -->
-            <div id="map" class="border border-slate-800"></div>
-
-            <button onclick="requestPickup()" id="pickup-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-blue-600/20 active:scale-95 transition">
-                <i class="fa-solid fa-truck-ramp-box mr-1"></i> Request Pickup Now
-            </button>
-            
-            <div id="pickup-status" class="hidden text-center p-3 bg-blue-950/40 border border-blue-900/50 rounded-2xl text-[12px] text-blue-300">
-                <i class="fa-solid fa-truck fa-bounce mr-2"></i> ළඟම ඇති Eco-ලොරි රථය ඔබ වෙත පැමිණෙමින් පවතී...
+        <div class="glass p-5 rounded-2xl space-y-3 text-[11px] text-slate-400 border border-slate-900">
+            <h4 class="font-bold text-slate-200 uppercase tracking-wider text-xs border-b border-slate-800 pb-1"><i class="fa-solid fa-scale-balanced text-amber-500 mr-1"></i> නීතිමය කොන්දේසි සහ රජයේ රීති (Policies & Penalties)</h4>
+            <div class="space-y-1.5 list-none pl-0 leading-relaxed text-slate-400">
+                <p>• <b>ඇප් එකේ පොදු රීති:</b> කිසිම අවස්ථාවක ව්‍යාජ අපද්‍රව්‍ය පින්තූර හෝ දත්ත ඇතුළත් කිරීම තහනම්ය. එසේ කළහොත් ගිණුම අත්හිටුවනු ලැබේ.</p>
+                <p>• <b>ශ්‍රී ලංකා ජාතික පාරිසරික පනත:</b> 1980 අංක 47 දරන ජාතික පාරිසරික පනතට අනුව පොදු ස්ථාන වලට හෝ පරිසරයට අක්‍රමවත් ලෙස කැලිකසල බැහැර කිරීම දඬුවම් ලැබිය හැකි වරදකි.</p>
+                <p>• <b>නීතිමය පියවර:</b> පලාත් පාලන ආයතන අණපනත් ප්‍රකාරව පරිසරය දූෂණය කරන්නන්ට එරෙහිව රුපියල් 25,000 දක්වා දඩ හෝ සිරදඬුවම් නියම කිරීමට රජයට බලය ඇත.</p>
+                <p>• <b>දත්ත රක්ෂණය:</b> මෙම ඇප් එක හරහා රැස්කරන සියලුම කුණු දත්ත ආයතනික ප්‍රතිචක්‍රීකරණ පර්යේෂණ සඳහා පමණක් විකුණනු ලැබේ.</p>
             </div>
         </div>
+
     </div>
 
-    <!-- BOTTOM GOOGLE AD BANNER (යටින්ම පේන්න තියෙන ඇඩ් එක) -->
-    <div class="w-full max-w-md ad-box p-2 rounded-xl text-center text-[10px] text-emerald-400/60 font-bold tracking-widest uppercase">
-        <div class="h-12 flex items-center justify-center">Google Banner Ad Space</div>
-    </div>
-
-    <!-- Leaflet JS for Map -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <script>
-        let map, userMarker;
+        // 📢 [UPDATED] Direct Secure Google Gemini API Key Loaded
+        const GEMINI_API_KEY = "Gen-lang-client-0349607102";
 
-        // 🎥 කැමරාව පණ ගැන්වීම
-        async function startCamera() {
+        let currentTab = 'scan';
+        let mapInitialized = false;
+        let map, videoStream;
+        let usersDatabase = [
+            { name: "Asidu Spec", phone: "0771234567", email: "msasidu@spec.com", area: "Colombo" }
+        ];
+
+        // Access Web Camera on launch
+        async function initCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-                document.getElementById('video').srcObject = stream;
-            } catch (err) { 
-                console.error(err);
-                alert("කැමරාව ක්‍රියාත්මක කිරීමට අවසර දෙන්න!"); 
+                videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                document.getElementById('video').srcObject = videoStream;
+            } catch (err) {
+                console.error("Camera access blocked: ", err);
             }
         }
 
-        // 🗺️ සිතියම පණ ගැන්වීම (Sri Lanka Location Default)
+        // Handle User Submission Form
+        function saveUser() {
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const email = document.getElementById('reg-email').value;
+            const area = document.getElementById('reg-area').value;
+
+            if(!name || !phone || !email || !area) {
+                alert("කරුණාකර සියලුම ලියාපදිංචි විස්තර ඇතුළත් කරන්න!");
+                return;
+            }
+
+            usersDatabase.push({ name, phone, email, area });
+            document.getElementById('register-card').classList.add('hidden');
+            document.getElementById('main-app-card').classList.remove('hidden');
+            initCamera();
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.getElementById(`view-${currentTab}`).classList.add('hidden');
+            document.getElementById(`tab-${currentTab}`).className = "text-slate-400 p-2.5 rounded-lg transition";
+            
+            currentTab = tabId;
+            
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).className = "bg-emerald-500 text-slate-950 p-2.5 rounded-lg transition";
+
+            if (tabId === 'map' && !mapInitialized) {
+                setTimeout(initMap, 200);
+            }
+        }
+
+        // 100% Client-Side Pure Gemini AI Camera Scanner
+        async function captureAndScan() {
+            const video = document.getElementById('video');
+            const loading = document.getElementById('loading');
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+
+            loading.classList.remove('hidden');
+            resultBox.classList.add('hidden');
+
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            const base64Data = canvas.toDataURL('image/jpeg').split(',')[1];
+
+            try {
+                // Direct Frontend Endpoint API call to avoid Server node-fetch issues
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: "ඔබ අපද්‍රව්‍ය කළමනාකරණය පිළිබඳ විශේෂඥයෙකි. මෙම පින්තූරයේ ඇති ද්‍රව්‍යය කුමක්දැයි හඳුනාගෙන, එය ප්‍රතිචක්‍රීකරණය කළ හැකිද (Recyclable) නැද්ද යන්න සහ එය බැහැර කළ යුතු නිවැරදි ක්‍රමය කෙටියෙන් සිංහල භාෂාවෙන් පවසන්න." },
+                                { inlineData: { mimeType: "image/jpeg", data: base64Data } }
+                            ]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                loading.classList.add('hidden');
+                resultBox.classList.remove('hidden');
+
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    resultText.innerText = data.candidates[0].content.parts[0].text;
+                } else if(data.error) {
+                    resultText.innerText = `Google API Error: ${data.error.message}`;
+                } else {
+                    resultText.innerText = "පින්තූරය පැහැදිලි නැත. කරුණාකර නැවත උත්සාහ කරන්න.";
+                }
+
+            } catch (error) {
+                loading.classList.add('hidden');
+                resultBox.classList.remove('hidden');
+                resultText.innerText = "සම්බන්ධතා දෝෂයකි: " + error.message;
+            }
+        }
+
+        function sendScanToMerchants() {
+            alert("✅ සාර්ථකයි! කුණු දත්ත සමුදාය අවට සිටින බලපත්‍රලාභී ප්‍රතිචක්‍රීකරණ වෙළෙන්දන් වෙත විකුණා ඔබගේ ගිණුමට ප්‍රතිලාභ එක් කරන ලදී.");
+        }
+
+        function requestPickup() {
+            const type = document.getElementById('pickup-type').value;
+            const weight = document.getElementById('pickup-weight').value || "Not specified";
+            alert(`🚚 Eco-Pickup Request Sent!\nවර්ගය: ${type}\nබර: ${weight}\nලඟම සිටින වෙළෙන්දා විනාඩි 15කින් ඔබ වෙත පැමිණෙනු ඇත.`);
+        }
+
+        // Live Maps OpenStreetMap (Leaflet Integration)
         function initMap() {
-            map = L.map('map').setView([6.9271, 79.8612], 13); // Colombo
+            map = L.map('map').setView([6.9271, 79.8612], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap'
             }).addTo(map);
 
-            // User ගේ ඇත්තම Location එක ගැනීම
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    map.setView([lat, lon], 15);
-                    userMarker = L.marker([lat, lon]).addTo(map)
-                        .bindPopup('ඔබේ ස්ථානය (Eco-Collection Point)')
-                        .openPopup();
-                }, () => {
-                    console.log("Location access denied or unavailable.");
-                });
+            const merchants = [
+                { name: "සුදත් ප්ලාස්ටික් එකතු කරන්නෝ", lat: 6.9344, lng: 79.8510, type: "Plastics" },
+                { name: "කොළඹ ඊ-වේස්ට් ඩීලර්ස්", lat: 6.9120, lng: 79.8730, type: "Electronics" },
+                { name: "Spec Scrap Metal Traders", lat: 6.9410, lng: 79.8690, type: "All Metals" }
+            ];
+
+            merchants.forEach(m => {
+                L.marker([m.lat, m.lng]).addTo(map)
+                    .bindPopup(`<b>${m.name}</b><br>භාරගන්නා ද්‍රව්‍ය: ${m.type}<br><button class="bg-emerald-500 text-slate-950 px-2 py-0.5 rounded text-[10px] font-bold mt-1">Call Dealer</button>`);
+            });
+
+            mapInitialized = true;
+        }
+
+        // Protected Admin Controls Area
+        function openAdmin() {
+            const pass = prompt("ඇඩ්මින් රහස් මුද්‍රාව ඇතුළත් කරන්න (Password):");
+            if(pass === "mss@76") {
+                document.getElementById('view-admin').classList.remove('hidden');
+                updateAdminLogs();
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            } else {
+                alert("වැරදි රහස් පදයක්! ප්‍රවේශය ප්‍රතික්ෂේප විය.");
             }
         }
 
-        window.onload = () => {
-            startCamera();
-            initMap();
-        };
-
-        // 🤖 Netlify Function එක හරහා රූපය ස්කෑන් කිරීම
-        async function captureAndScan() {
-            const video = document.getElementById('video');
-            if(!video.srcObject) return alert("කැමරාව සූදානම් නැත!");
-
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            const base64Image = canvas.toDataURL('image/jpeg').split(',')[1];
-
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('result-box').classList.add('hidden');
-
-            try {
-                // Netlify Serverless Function එකට Request එක යැවීම
-                const response = await fetch('/.netlify/functions/scan', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ image: base64Image })
-                });
-
-                const data = await response.json();
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('result-box').classList.remove('hidden');
-
-                if(data.text) {
-                    document.getElementById('result-text').innerText = data.text;
-                } else {
-                    document.getElementById('result-text').innerText = "දෝෂයකි: " + (data.error || "පින්තූරය හඳුනාගත නොහැකි විය.");
-                }
-            } catch (err) {
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('result-box').classList.remove('hidden');
-                document.getElementById('result-text').innerText = "සර්වර් එක සමඟ සම්බන්ධ විය නොහැක. කරුණාකර ඔබ Netlify Environment Variables වල GEMINI_API_KEY එක නිවැරදිව දමා ඇත්දැයි පරීක්ෂා කරන්න.";
-            }
+        // Close Admin Mode
+        function closeAdmin() {
+            document.getElementById('view-admin').classList.add('hidden');
         }
 
-        // 🚛 Pickup Request එක (PickMe Style Animation)
-        function requestPickup() {
-            document.getElementById('pickup-btn').classList.add('hidden');
-            document.getElementById('pickup-status').classList.remove('hidden');
-            
-            if(userMarker) {
-                let count = 0;
-                const userLatLong = userMarker.getLatLng();
-                const truckMarker = L.marker([userLatLong.lat + 0.005, userLatLong.lng + 0.005], {
-                    icon: L.icon({
-                        iconUrl: 'https://cdn-icons-png.flaticon.com/512/744/744465.png',
-                        iconSize: [35, 35]
-                    })
-                }).addTo(map).bindPopup('Eco Truck').openPopup();
-
-                const interval = setInterval(() => {
-                    const curLat = truckMarker.getLatLng().lat;
-                    const curLng = truckMarker.getLatLng().lng;
-                    
-                    truckMarker.setLatLng([
-                        curLat - (curLat - userLatLong.lat) * 0.2,
-                        curLng - (curLng - userLatLong.lng) * 0.2
-                    ]);
-
-                    count++;
-                    if(count > 10) {
-                        clearInterval(interval);
-                        truckMarker.bindPopup('🚨 ලොරි රථය පැමිණ ඇත!').openPopup();
-                        document.getElementById('pickup-status').innerHTML = "✅ <b>Eco-ලොරි රථය ඔබගේ ස්ථානයට පැමිණ ඇත!</b>";
-                    }
-                }, 1000);
-            }
+        function updateAdminLogs() {
+            document.getElementById('admin-user-count').innerText = usersDatabase.length;
+            const list = document.getElementById('admin-user-list');
+            list.innerHTML = "";
+            usersDatabase.forEach(u => {
+                list.innerHTML += `<p>• ${u.name} | ${u.phone} | ${u.area} | Lead Generated</p>`;
+            });
         }
     </script>
 </body>
